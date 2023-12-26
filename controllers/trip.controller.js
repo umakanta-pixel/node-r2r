@@ -14,9 +14,9 @@ class tripController {
                 finalRoutes = { type: 'car', distance: term['distance'], duration: term['duration'], start_address: term['start_address'], end_address: term['end_address'], overview_polyline: route['overview_polyline']['points'], start_place_id: result['geocoded_waypoints'][0]['place_id'], end_place_id: result['geocoded_waypoints'][1]['place_id'] };
             })
         }
+        // console.log(finalRoutes);
         return finalRoutes;
     }
-
 
 
     async combineRouteList(req, res) {
@@ -34,6 +34,7 @@ class tripController {
             var responseData = { searchDetails: req.body };
             responseData['routes'] = [];
             const [isTransferAvailable, drivingRoute] = await Promise.all([transferLib.hasLocation(req.body), tripController.drivingRoutes(req.body)]);
+            // console.log(drivingRoute);
             if (isTransferAvailable) {
                 responseData['routes'].push({ total_duration: drivingRoute['duration']['value'], first_stop: drivingRoute['start_address'], last_stop: drivingRoute['end_address'], modes: drivingRoute, overview_polyline: drivingRoute['overview_polyline'] });
             }
