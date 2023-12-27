@@ -9,8 +9,8 @@ const routeDataValidateSchema = require('../validations/route.validation')
 
 // router.use('/trip-planner', encryption, decryption, require("./trip.routes"));
 // router.use('/trip-planner', require("./trip.routes"));
-router.post('/trip-planner/routes', routeDataValidateSchema, tripController.combineRouteList);
-// router.post('/trip-planner/routes',encryption,decryption, routeDataValidateSchema, tripController.combineRouteList);
+// router.post('/trip-planner/routes',decryption, tripController.combineRouteList);
+router.post('/trip-planner/routes',encryption,decryption, routeDataValidateSchema, tripController.combineRouteList);
 // router.post('/trip-planner/routes', encryption, decryption, tripController.combineRouteList);
 
 // router.use('/api/v1/users', decryption, require("./user.routes"));

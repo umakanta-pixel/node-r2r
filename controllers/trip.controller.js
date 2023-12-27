@@ -22,6 +22,8 @@ class tripController {
     async combineRouteList(req, res) {
 
         try {
+            console.log(req.body);
+            return 1;
             const errors = validationResult(req);
             // if there is error then return Error
             if (!errors.isEmpty()) {
