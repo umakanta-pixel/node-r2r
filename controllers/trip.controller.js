@@ -23,8 +23,8 @@ class tripController {
         let flightRoutes = await flightController.getnearestairportDetails(data);
         final = await Promise.all(flightRoutes.map(async (routes) => {
             let tmp = { 'total_duration': 0, 'first_stop': routes['departure_airport'], 'last_stop': routes['arrival_airport'], 'overview_polyline': '' };
-            let departure = routes['itineraries']['segments'][0]['departure']['at'].replace(" ", "T");
-            let arrival = routes['itineraries']['segments'][(routes['itineraries']['segments'].length) - 1]['arrival']['at'].replace(" ", "T");
+            let departure = routes['itineraries']['segments'][0]['departure_date'].replace(" ", "T");
+            let arrival = routes['itineraries']['segments'][(routes['itineraries']['segments'].length) - 1]['arrival_date'].replace(" ", "T");
             let driveOne = await tripController.drivingRoutes({ 'start_point': data['start_point'], 'end_point': routes['departure_airport'], 'departure': departure });
             let driveTwo = await tripController.drivingRoutes({ 'start_point': routes['arrival_airport'], 'end_point': data['end_point'], 'arrival': arrival });
             tmp['total_duration'] += driveOne['duration']['value'] + driveTwo['duration']['value'] + routes['onway_duration_hours'];
@@ -48,6 +48,7 @@ class tripController {
             var responseData = { searchDetails: req.body };
             responseData['routes'] = [];
             const [isTransferAvailable, drivingRoute, flightRoutes] = await Promise.all([transferLib.hasLocation(req.body), tripController.drivingRoutes(req.body), tripController.flightRoutes(req.body)]);
+
             if (isTransferAvailable) {
                 responseData['routes'].push({ total_duration: drivingRoute['duration']['value'], first_stop: drivingRoute['start_address'], last_stop: drivingRoute['end_address'], modes: drivingRoute, overview_polyline: drivingRoute['overview_polyline'] });
             }
