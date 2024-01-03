@@ -46,7 +46,7 @@ class flightController {
                         if (lastArrivaltime != "") {
                             arrival_date = new Date(lastArrivaltime);
                             var timeDifference = deperture_date.getTime() - arrival_date.getTime();
-                            console.log("arrival_date", timeDifference);
+                            // console.log("arrival_date", timeDifference);
 
                             var seconds = Math.floor(timeDifference / 1000);
                             var minutes = Math.floor(seconds / 60);

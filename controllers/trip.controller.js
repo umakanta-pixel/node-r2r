@@ -21,10 +21,14 @@ class tripController {
     static async flightRoutes(data) {
         var final = [];
         let flightRoutes = await flightController.getnearestairportDetails(data);
+        // console.log(flightRoutes);
         final = await Promise.all(flightRoutes.map(async (routes) => {
+            console.log(routes['itineraries']['segments']);
             let tmp = { 'total_duration': 0, 'first_stop': routes['departure_airport'], 'last_stop': routes['arrival_airport'], 'overview_polyline': '' };
-            let departure = routes['itineraries']['segments'][0]['departure_date'].replace(" ", "T");
-            let arrival = routes['itineraries']['segments'][(routes['itineraries']['segments'].length) - 1]['arrival_date'].replace(" ", "T");
+            let departure = routes['itineraries']['segments'][0]['departure_date'];
+            // let departure = routes['itineraries']['segments'][0]['departure_date'].replace(" ", "T");
+            let arrival = routes['itineraries']['segments'][(routes['itineraries']['segments'].length) - 1]['arrival_date'];
+            // let arrival = routes['itineraries']['segments'][(routes['itineraries']['segments'].length) - 1]['arrival_date'].replace(" ", "T");
             let driveOne = await tripController.drivingRoutes({ 'start_point': data['start_point'], 'end_point': routes['departure_airport'], 'departure': departure });
             let driveTwo = await tripController.drivingRoutes({ 'start_point': routes['arrival_airport'], 'end_point': data['end_point'], 'arrival': arrival });
             tmp['total_duration'] += driveOne['duration']['value'] + driveTwo['duration']['value'] + routes['onway_duration_hours'];
