@@ -1,13 +1,18 @@
-const { directionApiCall } = require('../helpers/helper');
+const { directionApiCall, logErrorToFile } = require('../helpers/helper');
+// const { validationResult } = require("express-validator");
+const Algolia = require("algoliasearch")
+
 const transferLib = require('../lib/transfer.lib');
-const { validationResult } = require("express-validator");
-const flightController = require('./flight.controller')
+const ferryLib = require('../lib/ferry.lib');
+const flightController = require('./flight.controller');
+const validate = require('../helpers/validation');
 
 class tripController {
     constructor() { }
 
     static async drivingRoutes(params) {
         let finalRoutes = [];
+        // params.mode='driving';
         const result = await directionApiCall(params);
         if (result.routes.length > 0) {
             result.routes.map((route) => {
@@ -38,28 +43,93 @@ class tripController {
         return final;
     }
 
+    // async ferryRoutes(req, res) {
+    //     var result = await ferryLib.routesByCoordinates(req.body);
+    //     res.send(result);
+    // }
+    static async ferryRoutes(params) {
+        const dt = params.departure_datetime.split('T')[1]
+        const start_time = dt.split(':')[0] + ':' + dt.split(':')[1]
+        const algoliaClient = new Algolia('C2CIGV0HZ4', '92c465f379330bfc3c60c340bb1aceac');
+        const ferriesIndex = algoliaClient.initIndex("ferries_master");
+
+        const data = await ferriesIndex.search(params.start_city_code, {
+            facetFilters: ['arrival_city_code:' + params.end_city_code]
+        })
+        const routes = data.hits.filter(obj => obj.departure_time >= start_time);
+
+        // return data.hits
+        const final = await Promise.all(routes.map(async (route) => {
+            route.type = 'ferry';
+            let tmp = {
+                total_duration: route['duration_in_seconds'],
+                first_stop: route['departure_port'] + ' port',
+                last_stop: route['arrival_port'] + ' port',
+                overview_polyline: '',
+                modes: [route]
+            };
+            let driveOne = await tripController.drivingRoutes({
+                'start_point': params.start_point_latitude + ',' + params.start_point_longitude,
+                'end_point': route.departure_port_latitude + ',' + route.departure_port_longitude,
+                'arrival': params.departure_datetime.split('T')[0] + 'T' + route.departure_time + ':00'
+            });
+            if (driveOne) {
+                tmp.modes.unshift(driveOne);
+                tmp.total_duration += driveOne['duration']['value']
+            }
+            let driveTwo = await tripController.drivingRoutes({
+                'start_point': route.arrival_port_latitude + ',' + route.arrival_port_longitude,
+                'end_point': params.end_point_latitude + ',' + params.end_point_longitude,
+                'departure': params.departure_datetime.split('T')[0] + 'T' + route.arrival_time + ':00'
+            });
+            if (driveTwo) {
+                tmp.modes.push(driveTwo);
+                tmp.total_duration += driveTwo['duration']['value']
+            }
+            return tmp;
+        }));
+        return final;
+    }
+
 
     async combineRouteList(req, res) {
 
         try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.json({
-                    res_code: 201,
-                    response: errors.array(),
-                });
+            const validationError = validate(req.body);
+            if (validationError) {
+                return res.json(validationError);
             }
+
             var responseData = { searchDetails: req.body };
             responseData['routes'] = [];
-            const [isTransferAvailable, drivingRoute, flightRoutes] = await Promise.all([transferLib.hasLocation(req.body), tripController.drivingRoutes(req.body), tripController.flightRoutes(req.body)]);
 
+            const [isTransferAvailable, drivingRoute, flightRoutes, ferryRoutes] = await Promise.all([
+                req.body.serviceTypes.includes('car') && transferLib.hasLocation(req.body),
+                req.body.serviceTypes.includes('car') && tripController.drivingRoutes(req.body),
+                req.body.serviceTypes.includes('flight') && tripController.flightRoutes(req.body),
+                req.body.serviceTypes.includes('ferry') && tripController.ferryRoutes(req.body)
+            ]);
+            // const [isTransferAvailable, drivingRoute, flightRoutes] = await Promise.all([transferLib.hasLocation(req.body), tripController.drivingRoutes(req.body), tripController.flightRoutes(req.body)]);
+            // console.log(isTransferAvailable);
             if (isTransferAvailable) {
-                responseData['routes'].push({ total_duration: drivingRoute['duration']['value'], first_stop: drivingRoute['start_address'], last_stop: drivingRoute['end_address'], modes: drivingRoute, overview_polyline: drivingRoute['overview_polyline'] });
+                responseData['routes'].push({
+                    total_duration: drivingRoute['duration']['value'],
+                    first_stop: drivingRoute['start_address'],
+                    last_stop: drivingRoute['end_address'],
+                    modes: drivingRoute,
+                    overview_polyline: drivingRoute['overview_polyline']
+                });
             }
 
-            flightRoutes.map((flightRoute) => {
-                responseData['routes'].push(flightRoute);
-            })
+            if (ferryRoutes.length > 0) {
+                ferryRoutes.map((route) => {
+                    responseData['routes'].push(route);
+                })
+            }
+
+            // flightRoutes.map((flightRoute) => {
+            //     responseData['routes'].push(flightRoute);
+            // })
 
             res.send({
                 res_code: 200,
@@ -68,6 +138,7 @@ class tripController {
             })
 
         } catch (error) {
+            // logErrorToFile(error)
             const stackLines = error.stack.split('\n');
             res.send({
                 res_code: 201,
