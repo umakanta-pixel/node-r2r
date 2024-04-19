@@ -59,6 +59,7 @@ class tripController {
         const routes = data.hits.filter(obj => obj.departure_time >= start_time);
 
         // return data.hits
+        // return routes;
         const final = await Promise.all(routes.map(async (route) => {
             route.type = 'ferry';
             let tmp = {
@@ -73,7 +74,7 @@ class tripController {
                 'end_point': route.departure_port_latitude + ',' + route.departure_port_longitude,
                 'arrival': params.departure_datetime.split('T')[0] + 'T' + route.departure_time + ':00'
             });
-            if (driveOne) {
+            if (driveOne.length) {
                 tmp.modes.unshift(driveOne);
                 tmp.total_duration += driveOne['duration']['value']
             }
@@ -82,7 +83,7 @@ class tripController {
                 'end_point': params.end_point_latitude + ',' + params.end_point_longitude,
                 'departure': params.departure_datetime.split('T')[0] + 'T' + route.arrival_time + ':00'
             });
-            if (driveTwo) {
+            if (driveTwo.length) {
                 tmp.modes.push(driveTwo);
                 tmp.total_duration += driveTwo['duration']['value']
             }
