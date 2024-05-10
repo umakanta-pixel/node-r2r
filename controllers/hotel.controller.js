@@ -8,7 +8,12 @@ class hotelController {
         try {
             data = await Hotel.getHotelDetails(req.body);
         } catch (error) {
-            console.log(error);
+            res.send({
+                res_code: 201,
+                response: "Something unexpected happened. Try again later.",
+                server_message: error,
+                line: stackLines[1].trim() ?? ''
+            })
         }
         res.send(data);
     }
