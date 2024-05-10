@@ -11,8 +11,8 @@ const hotelController = require('../controllers/hotel.controller');
 
 // router.post('/api/v1/trip-planner/routes', tripController.combineRouteList);
 // router.post('/api/v1/trip-planner/routes',routeDataValidateSchema, tripController.combineRouteList);
-router.post('/api/v1/trip-planner/routes', encryption, decryption, tripController.combineRouteList);
-router.post('/api/v1/trip-planner/ferry', ferryController.fetchFromAlgolia);
-router.post('api/v1/hotel/get-details',hotelController.getHotelDetails);
+router.post('/trip-planner/routes', encryption, decryption, tripController.combineRouteList);
+router.post('/trip-planner/ferry', ferryController.fetchFromAlgolia);
+router.post('/hotel/get-details',hotelController.getHotelDetails);
 
 module.exports = router;

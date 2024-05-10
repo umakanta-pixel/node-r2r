@@ -15,6 +15,6 @@ app.use(cors());
 
 // app.get('/', (req, res) => res.send('welcome'))
 // app.use('/api/v2', require('./routes/routes'));
-app.use('/', require('./routes/routes'));
+app.use('/api/v1', require('./routes/routes'));
 
 module.exports = app;
