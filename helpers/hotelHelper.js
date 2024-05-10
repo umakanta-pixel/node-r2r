@@ -89,7 +89,7 @@ exports.getHotelDetails = async (params) => {
   soap.createClient(actionURL, soapOptions, (err, client) => {
     if (err) {
       console.error('Error creating SOAP client:', err);
-      return;
+      return err;
     }
 
     // Add SOAP header if needed
@@ -105,11 +105,12 @@ exports.getHotelDetails = async (params) => {
     client.MyOperation({ xml: soapRequest }, (err, result, rawResponse) => {
       if (err) {
         console.error('Error calling SOAP operation:', err);
-        return;
+        return err;
       }
 
       console.log('SOAP response:', result);
       console.log('Raw SOAP response:', rawResponse); // Raw SOAP XML
+      return result;
     });
   });
 }
