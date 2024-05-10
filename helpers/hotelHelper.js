@@ -86,31 +86,36 @@ exports.getHotelDetails = async (params) => {
   };
 
   // Send SOAP request
-  soap.createClient(actionURL, soapOptions, (err, client) => {
-    if (err) {
-      console.error('Error creating SOAP client:', err);
-      return err;
-    }
-
-    // Add SOAP header if needed
-    const soapHeader = {
-      'add:MessageID': messageID,
-      'add:Action': actionURL,
-      'add:To': addressingURL,
-    };
-
-    client.addSoapHeader(soapHeader);
-
-    // Call the SOAP operation
-    client.MyOperation({ xml: soapRequest }, (err, result, rawResponse) => {
+  try {
+    soap.createClient(actionURL, soapOptions, (err, client) => {
       if (err) {
-        console.error('Error calling SOAP operation:', err);
+        console.error('Error creating SOAP client:', err);
         return err;
       }
 
-      console.log('SOAP response:', result);
-      console.log('Raw SOAP response:', rawResponse); // Raw SOAP XML
-      return result;
+      // Add SOAP header if needed
+      const soapHeader = {
+        'add:MessageID': messageID,
+        'add:Action': actionURL,
+        'add:To': addressingURL,
+      };
+
+      client.addSoapHeader(soapHeader);
+
+      // Call the SOAP operation
+      client.MyOperation({ xml: soapRequest }, (err, result, rawResponse) => {
+        if (err) {
+          console.error('Error calling SOAP operation:', err);
+          return err;
+        }
+
+        console.log('SOAP response:', result);
+        console.log('Raw SOAP response:', rawResponse); // Raw SOAP XML
+        return result;
+      });
     });
-  });
+  } catch (error) {
+     return error;
+  }
+
 }
