@@ -2,6 +2,7 @@ const { default: axios } = require("axios");
 const Helper = require('../helpers/helper');
 const soap = require('soap');
 require('dotenv').config();
+const fs = require('fs');
 
 let actionURL = "http://webservices.amadeus.com/Hotel_MultiSingleAvailability_10.0";
 let addressingURL = "https://nodeD3.test.webservices.amadeus.com/1ASIWAMAAGNU";
@@ -78,44 +79,36 @@ exports.getHotelDetails = async (params) => {
   const soapParams = { ...result, ...data };
   const soapRequest = buildSoapRequest(soapParams);
   //return soapRequest;
-  const soapOptions = {
-    forceSoap12Headers: true,
-    customDeserializer: {
-      '': (str) => str.replace(/\r?\n|\r/g, '').trim() // Remove newlines
-    }
-  };
-
   // Send SOAP request
+
+
+  // Define a function to get the dynamic file path
+  function getDynamicFilePath() {
+    // Logic to determine the dynamic file path
+    return './1ASIWAMAAGN_PDT_HotelAvailability_2.0_4.0.wsdl';
+  }
+  const filePath = getDynamicFilePath();
+  console.log(filePath);
   try {
-    soap.createClient(actionURL, soapOptions, (err, client) => {
+    
+    // Read the WSDL file asynchronously
+    fs.readFile(filePath, 'utf8', (err, wsdl) => {
       if (err) {
-        console.error('Error creating SOAP client:', err);
-        return err;
+        console.error('Failed to read WSDL file:', err);
+      } else {
+        //Create a SOAP client with the fetched WSDL content
+        soap.createClient(wsdl, (err, client) => {
+          if (err) {
+            console.error('Failed to create SOAP client:', err);
+          } else {
+            // Call SOAP methods...
+          }
+        });
+        return "SOAP client created";
       }
-
-      // Add SOAP header if needed
-      const soapHeader = {
-        'add:MessageID': messageID,
-        'add:Action': actionURL,
-        'add:To': addressingURL,
-      };
-
-      client.addSoapHeader(soapHeader);
-
-      // Call the SOAP operation
-      client.MyOperation({ xml: soapRequest }, (err, result, rawResponse) => {
-        if (err) {
-          console.error('Error calling SOAP operation:', err);
-          return err;
-        }
-
-        console.log('SOAP response:', result);
-        console.log('Raw SOAP response:', rawResponse); // Raw SOAP XML
-        return result;
-      });
     });
   } catch (error) {
-     return error;
+    return error;
   }
 
 }
