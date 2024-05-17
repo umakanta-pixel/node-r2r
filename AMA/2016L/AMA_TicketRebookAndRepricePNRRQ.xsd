@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 rel. 2 sp2 (x64) (http://www.altova.com) by ﻿AMADEUS s.a.s. (AMADEUS s.a.s.) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://xml.amadeus.com/2010/06/Ticket_RebookAndRepricePNR_v1" xmlns:ama="http://xml.amadeus.com/2010/06/Types_v3" xmlns:far="http://xml.amadeus.com/2010/06/FareTypes_v2" xmlns:far_int="http://xml.amadeus.com/2010/06/FareInternalTypes_v2" xmlns:ns1="http://xml.amadeus.com/2010/06/Ticket_RebookAndRepricePNR_v1" xmlns:ota="http://www.opentravel.org/OTA/2003/05/OTA2011A" xmlns:rtl="http://xml.amadeus.com/2010/06/Retailing_Types_v2" targetNamespace="http://xml.amadeus.com/2010/06/Ticket_RebookAndRepricePNR_v1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.000" id="AMA2016L">
+  <xs:import namespace="http://www.opentravel.org/OTA/2003/05/OTA2011A" schemaLocation="../../OTA/2011A/OTA_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/FareTypes_v2" schemaLocation="AMA_FareElementCommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/Types_v3" schemaLocation="../2016B/AMA_CommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/Retailing_Types_v2" schemaLocation="AMA_Retailing_CommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/FareInternalTypes_v2" schemaLocation="AMA_FareInternalCommonTypes_Proxy.xsd" />
+  <xs:element name="AMA_TicketRebookAndRepricePNRRQ">
+    <xs:annotation>
+      <xs:documentation>Rebook &amp; Reprice request in stateless or stateful mode</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Reservation" type="rtl:ReservationType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Reservation information</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Commit" type="rtl:CommitType" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>Commit options</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element name="Rebooking" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Cancellation" type="rtl:AssociationsType" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>A list of PNR elements which should be cancelled by RebookAndReprice.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="Confirmation" type="rtl:AssociationsType" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>A list of PNR elements for which the status should be changed to "HK".</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="Replication" type="rtl:ReplicationType" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>A list of PNR elements types which should be carried over to the new segment by RebookAndReprice.</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="Bounds" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Bound" minOccurs="1" maxOccurs="99">
+                      <xs:annotation>
+                        <xs:documentation>Bound to add to the itinerary of the PNR (bounds can contain open segments).</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Segment" type="rtl:AirSegmentType" maxOccurs="99">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Segment element</xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="NIP" type="ama:NumericStringLength1to99" use="optional">
+                          <xs:annotation>
+                            <xs:appinfo source="http://xml.amadeus.com/ErrorCodes">
+                              <ama:error code="1194">INVALID NUMBER IN PARTY</ama:error>
+                            </xs:appinfo>
+                            <xs:documentation xml:lang="en">Number in party</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute name="ActionCode" type="rtl:StatusCode" use="optional">
+                          <xs:annotation>
+                            <xs:documentation>Requested action code.</xs:documentation>
+                          </xs:annotation>
+                        </xs:attribute>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="FrequentFlyers" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Frequent Flyer Cards Information</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="FrequentFlyer" maxOccurs="99">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Frequent Flyer Card element</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:annotation>
+                          <xs:documentation xml:lang="en">Frequent Flyer Card element in request</xs:documentation>
+                        </xs:annotation>
+                        <xs:sequence>
+                          <xs:element name="FrequentFlyerCard">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="en">Frequent Flyer Card information</xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                              <xs:complexContent>
+                                <xs:extension base="rtl:FrequentFlyerCardType">
+                                  <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                                </xs:extension>
+                              </xs:complexContent>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="MileageRequests" minOccurs="0" maxOccurs="1">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="MileageRequest" minOccurs="1" maxOccurs="99">
+                                  <xs:annotation>
+                                    <xs:documentation xml:lang="en">miles accrual request</xs:documentation>
+                                  </xs:annotation>
+                                  <xs:complexType>
+                                    <xs:complexContent>
+                                      <xs:extension base="rtl:MileageRequestType">
+                                        <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                                      </xs:extension>
+                                    </xs:complexContent>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="RedemptionRequests" minOccurs="0" maxOccurs="1">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="RedemptionRequest" minOccurs="1" maxOccurs="99">
+                                  <xs:annotation>
+                                    <xs:documentation xml:lang="en">redemption request</xs:documentation>
+                                  </xs:annotation>
+                                  <xs:complexType>
+                                    <xs:annotation>
+                                      <xs:documentation xml:lang="en">redemption request element</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexContent>
+                                      <xs:extension base="rtl:RedemptionRequestType">
+                                        <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                                      </xs:extension>
+                                    </xs:complexContent>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="UpgradeRequests" minOccurs="0" maxOccurs="1">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="UpgradeRequest" minOccurs="1" maxOccurs="99">
+                                  <xs:annotation>
+                                    <xs:documentation xml:lang="en">Upgrade request</xs:documentation>
+                                  </xs:annotation>
+                                  <xs:complexType>
+                                    <xs:annotation>
+                                      <xs:documentation xml:lang="en">Upgrade request element</xs:documentation>
+                                    </xs:annotation>
+                                    <xs:complexContent>
+                                      <xs:extension base="rtl:UpgradeRequestType">
+                                        <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                                      </xs:extension>
+                                    </xs:complexContent>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Contacts" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="en">Contacts Information</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Contact" maxOccurs="99">
+                      <xs:complexType>
+                        <xs:annotation>
+                          <xs:documentation xml:lang="en">Contact element in request</xs:documentation>
+                        </xs:annotation>
+                        <xs:complexContent>
+                          <xs:extension base="rtl:ContactType">
+                            <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                          </xs:extension>
+                        </xs:complexContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SpecialServiceRequests" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="SpecialServiceRequest" minOccurs="1" maxOccurs="99">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Special Service Request information</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:complexContent>
+                          <xs:extension base="rtl:AncillaryServiceType">
+                            <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                          </xs:extension>
+                        </xs:complexContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Seats" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Seat" minOccurs="1" maxOccurs="99">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Seat Request information</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:complexContent>
+                          <xs:extension base="rtl:SeatType">
+                            <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                          </xs:extension>
+                        </xs:complexContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="OtherServicesInformation" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="OtherServiceInformation" minOccurs="1" maxOccurs="99">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Other Service Information Request</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:complexContent>
+                          <xs:extension base="rtl:OSIType">
+                            <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                          </xs:extension>
+                        </xs:complexContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SpecialKeywords" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="SpecialKeyword" minOccurs="1" maxOccurs="99">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Special Keyword information</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:complexContent>
+                          <xs:extension base="rtl:SKType">
+                            <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                          </xs:extension>
+                        </xs:complexContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Remarks" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Remark" minOccurs="1" maxOccurs="99">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Remark information</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:complexContent>
+                          <xs:extension base="rtl:RemarkType">
+                            <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                          </xs:extension>
+                        </xs:complexContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="TimeLimits" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="TimeLimit" type="rtl:TimeLimitType" minOccurs="0" maxOccurs="99">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">Request for a creation of a TK element.</xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="FareDiscounts" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>FD elements to be created by RebookAndReprice.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="FareDiscount" minOccurs="1" maxOccurs="20">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="en">A FD element to be created by this RebookAndReprice transaction.</xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:complexContent>
+                          <xs:extension base="far:DiscountType">
+                            <xs:sequence>
+                              <xs:element name="Associations" type="rtl:AssociationsType" minOccurs="0" />
+                            </xs:sequence>
+                            <xs:attributeGroup ref="rtl:CommonIdentifierAttributes" />
+                          </xs:extension>
+                        </xs:complexContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Repricing" minOccurs="0">
+          <xs:annotation>
+            <xs:documentation>This part is responsible for driving the Repricing behavior of the service.</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ItineraryPricingOptions" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation>Options to use for re-pricing</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ItineraryPricingOption" type="far_int:PricingOptionType" minOccurs="0" maxOccurs="999" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Actions" use="required">
+        <xs:annotation>
+          <xs:documentation>List of actions to perform. Allowed actions are: COMMIT to commit modifications, QTDISPLAY to have quotation records returned after a repricing and FULLDISPLAY if all repricing details should be returned by the service. If left empty, by default commit will not be performed.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="RebookAndRepriceActionsType">
+            <xs:minLength value="0" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attributeGroup ref="ota:OTA_PayloadStdAttributes" />
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="RebookAndRepriceActionsType">
+    <xs:list>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="COMMIT">
+            <xs:annotation>
+              <xs:documentation>Triggers commit process.</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="QTDISPLAY">
+            <xs:annotation>
+              <xs:documentation>Indicates that quotation records should be returned by the service if repricing is performed.</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="FULLDISPLAY">
+            <xs:annotation>
+              <xs:documentation>Indicates that full repricing details will be returned by the service.</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SANITIZE">
+            <xs:annotation>
+              <xs:documentation>Indicates that fop and tst must be sanitized.</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:list>
+  </xs:simpleType>
+</xs:schema>

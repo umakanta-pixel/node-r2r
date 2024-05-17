@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://wsdl.amadeus.com/Ticket_RebookAndRepricePNR_v1" xmlns:ama_2010_06_Ticket_RebookAndRepricePNR_v1="http://xml.amadeus.com/2010/06/Ticket_RebookAndRepricePNR_v1" targetNamespace="http://wsdl.amadeus.com/Ticket_RebookAndRepricePNR_v1" name="Ticket_RebookAndRepricePNR_1.0">
+  <wsdl:documentation>Version 1.0</wsdl:documentation>
+  <wsdl:types>
+    <xs:schema>
+      <xs:import namespace="http://xml.amadeus.com/2010/06/Ticket_RebookAndRepricePNR_v1" schemaLocation="AMA/2016L/AMA_TicketRebookAndRepricePNRRQ.xsd" />
+      <xs:import namespace="http://xml.amadeus.com/2010/06/Ticket_RebookAndRepricePNR_v1" schemaLocation="AMA/2016L/AMA_TicketRebookAndRepricePNRRS.xsd" />
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="AMA_TicketRebookAndRepricePNRRQ_1.000">
+    <wsdl:part name="body" element="ama_2010_06_Ticket_RebookAndRepricePNR_v1:AMA_TicketRebookAndRepricePNRRQ" />
+  </wsdl:message>
+  <wsdl:message name="AMA_TicketRebookAndRepricePNRRS_1.000">
+    <wsdl:part name="body" element="ama_2010_06_Ticket_RebookAndRepricePNR_v1:AMA_TicketRebookAndRepricePNRRS" />
+  </wsdl:message>
+  <wsdl:portType name="Ticket_RebookAndRepricePNR_PT">
+    <wsdl:operation name="Ticket_RebookAndRepricePNR">
+      <wsdl:documentation>Version 1.0</wsdl:documentation>
+      <wsdl:input message="tns:AMA_TicketRebookAndRepricePNRRQ_1.000" />
+      <wsdl:output message="tns:AMA_TicketRebookAndRepricePNRRS_1.000" />
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>
+

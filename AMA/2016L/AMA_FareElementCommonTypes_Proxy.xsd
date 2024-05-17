@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by AMADEUS s.a.s. (AMADEUS s.a.s.) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://xml.amadeus.com/2010/06/FareTypes_v2" xmlns:ama_ct="http://xml.amadeus.com/2010/06/Types_v3" xmlns:att="http://xml.amadeus.com/2010/06/TicketTypes_v3" xmlns:etr="http://xml.amadeus.com/2010/06/ETR_Types_v4" xmlns:iata="http://www.iata.org/IATA/2007/00/IATA2010.1" xmlns:ota="http://www.opentravel.org/OTA/2003/05/OTA2011A" xmlns:pnr="http://xml.amadeus.com/2010/06/PNR_Types_v4" xmlns:tkt="http://xml.amadeus.com/2010/06/PayIssueTypes_v1" targetNamespace="http://xml.amadeus.com/2010/06/FareTypes_v2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.008" id="AMA2016L">
+  <xs:import namespace="http://www.iata.org/IATA/2007/00/IATA2010.1" schemaLocation="../../IATA/2010.1/IATA_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/ETR_Types_v4" schemaLocation="AMA_ETR_CommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/PayIssueTypes_v1" schemaLocation="../2014I/AMA_Ticket_PayIssueCommonType_Proxy.xsd" />
+  <xs:import namespace="http://www.opentravel.org/OTA/2003/05/OTA2011A" schemaLocation="../../OTA/2011A/OTA_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/Types_v3" schemaLocation="../2016B/AMA_CommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/PNR_Types_v4" schemaLocation="../2016H/AMA_PNR_CommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/TicketTypes_v3" schemaLocation="AMA_Ticket_GTP_CommonTypes_Proxy.xsd" />
+  <!--Replaced file inclusion C:/Users/ksgupta/Downloads/ZIP_file_data4/Retailing_RebookAndReprice_2.0/AMA/2016L/chameleon/AMA_FareElementCommonTypes.xsd with its content-->
+  <xs:complexType name="ContractType">
+    <xs:sequence>
+      <xs:element name="Record" minOccurs="0" maxOccurs="10">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="RecordLocators" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>The group of all record locators associated to this contract</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="RecordLocator" minOccurs="0" maxOccurs="99">
+                    <xs:annotation>
+                      <xs:documentation>Record locator of the booking</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:simpleContent>
+                        <xs:extension base="ama_ct:AlphaNumericStringLength1to25orString0">
+                          <xs:attribute name="originSystem" type="ama_ct:AlphaNumericStringLength1to8orString0">
+                            <xs:annotation>
+                              <xs:documentation>The system that holds the record locator of the booking:
+																Amadeus
+																Provider
+																Agent etc.</xs:documentation>
+                            </xs:annotation>
+                          </xs:attribute>
+                        </xs:extension>
+                      </xs:simpleContent>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Office" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="ID" type="ota:StringLength0to32">
+                  <xs:annotation>
+                    <xs:documentation>OfficeId for Amadeus or external Id in case of TTY POS</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="NumericID">
+                  <xs:annotation>
+                    <xs:documentation>IATA code</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[0-9]{1,9}" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="SystemCode">
+                  <xs:annotation>
+                    <xs:documentation>IATA airline code or GDS code</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[a-zA-Z0-9]{2,3}" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="City" type="ama_ct:StringLength3orString0" minOccurs="0" />
+          </xs:sequence>
+          <xs:attribute name="contractNumber" type="ama_ct:AlphaNumericStringLength1to32">
+            <xs:annotation>
+              <xs:documentation>The several contract numbers allocated for the contract:
+								some Contract Owner Type may have several Contract Numbers for a single contract, e.g. Rail has a first number allocated by 1A and another one by the external contract owner.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ticketingSystem" type="ama_ct:AlphaNumericStringLength1to19orString0" use="optional">
+            <xs:annotation>
+              <xs:documentation>Indicates which ticketing system has provided the contract number.
+								- External
+								- 1A
+								- etc.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="validity" type="etr:DateOrString0">
+            <xs:annotation>
+              <xs:documentation>The nature of the contract number:
+								- Temporary
+								- Permanent</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="issuanceChannel" type="att:IssuanceChannelType">
+            <xs:annotation>
+              <xs:documentation>The channel used to issue the contract : 1A, External</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="issueDate" type="etr:DateOrDateTimeTypeOrString0">
+            <xs:annotation>
+              <xs:documentation>Indicates issuance date/date and time of the  contract</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Fare" minOccurs="0" maxOccurs="9">
+        <xs:complexType>
+          <xs:attributeGroup ref="tkt:PriceAttributeGroup" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Delivery" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="method" type="ama_ct:AlphaNumericStringLength1to3orString0">
+            <xs:annotation>
+              <xs:documentation>The way the client will receive the info.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="url" type="etr:anyURLorString0">
+            <xs:annotation>
+              <xs:documentation>URL to print the ticket</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="retrievalType" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>The information needed to retrieve the ticket: ID card, credit card, etc...</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Warning" type="ota:WarningType" minOccurs="0" maxOccurs="10">
+        <xs:annotation>
+          <xs:documentation>Contains the details of a warning associated to the succesfully established contracts of a contract owner or for all contracts owners in case the ContractOwner attribute is set as empty.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="PassengerTypeCode" type="ota:AlphaLength3" use="optional">
+      <xs:annotation>
+        <xs:documentation>Passenger type linked to this element:
+					- PAX
+					- INF</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="ownerType" type="ama_ct:AlphaNumericStringLength1to19orString0" use="optional">
+      <xs:annotation>
+        <xs:documentation>The type of contract owner:
+					- FSC
+					- Rail
+					- etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="owner" type="ama_ct:AlphaNumericStringLength1to10orString0" use="optional">
+      <xs:annotation>
+        <xs:documentation>The contract owner:
+					- Lufthansa
+					- Trenitalia
+					- etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="contractType" type="att:TypeOfContract" use="optional">
+      <xs:annotation>
+        <xs:documentation>The type of contract established:
+					- Ticket
+					- EMD
+					- etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="media" type="att:MediaOfContract" use="optional">
+      <xs:annotation>
+        <xs:documentation>The media on which the contract was established:
+					- Electronic
+					- Paper
+					- etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="nature" type="att:NatureOfContract">
+      <xs:annotation>
+        <xs:documentation>The contract nature of the contract established:
+					- Domestic
+					- International
+					- etc.</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="status" type="ama_ct:AlphaNumericStringLength1to10">
+      <xs:annotation>
+        <xs:documentation>The specific status of the contract
+					E.g. : issued, cancelled</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="elementType" type="ama_ct:AlphaNumericStringLength1to10">
+      <xs:annotation>
+        <xs:documentation>The role of the contract:
+					E.g.: current, original</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="TourType">
+    <xs:sequence>
+      <xs:element name="Customer" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="PassangerTypeCode" type="ama_ct:AlphaStringLength3orString0" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Validity" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="endDate" type="etr:DateOrString0" use="optional" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ServiceProvider" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="Code" type="ama_ct:AlphaNumericStringLength1to3orString0" use="optional" />
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Description" type="ama_ct:StringLength1to256orString0" use="optional" />
+    <xs:attribute name="SubType" type="ama_ct:AlphaStringLength1to2orString0" use="optional">
+      <xs:annotation>
+        <xs:documentation>IT or BT or NR</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="ApprovalCode" type="ama_ct:NumericStringLength1">
+      <xs:annotation>
+        <xs:documentation>Conference approval code n1</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute name="Status" type="ama_ct:AlphaNumericStringLength1to3orString0">
+      <xs:annotation>
+        <xs:documentation>Status details an3</xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="DiscountType">
+    <xs:sequence>
+      <xs:element name="Discount" minOccurs="0" maxOccurs="3">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Customer" minOccurs="0">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="Card" minOccurs="0">
+                    <xs:complexType>
+                      <xs:attribute name="Type" type="ama_ct:AlphaNumericStringLength1to3orString0" use="optional" />
+                      <xs:attribute name="Number" type="ama_ct:AlphaNumericStringLength1to14orString0" use="optional" />
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+                <xs:attribute name="PassengerTypeCode" type="ama_ct:AlphaStringLength3orString0" />
+                <xs:attribute name="DateofBirth" type="etr:DateOrDateTimeTypeOrString0">
+                  <xs:annotation>
+                    <xs:documentation>Date of birth</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Validity" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="startDate" type="etr:DateOrDateTimeTypeOrString0" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Valid after date</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="endDate" type="etr:DateOrDateTimeTypeOrString0" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Valid before date</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="ServiceProvider" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="Code" type="ama_ct:AlphaNumericStringLength1to3orString0" use="optional" />
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="Code" type="ama_ct:AlphaNumericStringLength1to6orString0" use="optional">
+            <xs:annotation>
+              <xs:documentation>Discount code</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Percentage" type="ama_ct:NumericStringLength1to2orString0">
+            <xs:annotation>
+              <xs:documentation>Percentage applicable n2</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Index" type="ama_ct:AlphaNumericStringLength1to3orString0" use="optional">
+            <xs:annotation>
+              <xs:documentation>Index of the actual discount</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Description" type="ama_ct:StringLength1to256orString0" use="optional" />
+  </xs:complexType>
+</xs:schema>

@@ -23,8 +23,8 @@ function buildSoapRequest({ messageID, userId, encodedNonce, passSHA, timestamp,
   return `<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ses="http://xml.amadeus.com/2010/06/Session_v3">
     <soap:Header>
           <add:MessageID xmlns:add="http://www.w3.org/2005/08/addressing">${messageID}</add:MessageID>
-          <add:Action xmlns:add="http://www.w3.org/2005/08/addressing">http://webservices.amadeus.com/Hotel_MultiSingleAvailability_10.0</add:Action>
-          <add:To xmlns:add="http://www.w3.org/2005/08/addressing">https://nodeD3.test.webservices.amadeus.com/1ASIWAMAAGNU</add:To>
+          <add:Action xmlns:add="http://www.w3.org/2005/08/addressing">${actionURL}</add:Action>
+          <add:To xmlns:add="http://www.w3.org/2005/08/addressing">${addressingURL}</add:To>
           <link:TransactionFlowLink xmlns:link="http://wsdl.amadeus.com/2010/06/ws/Link_v1" />
           <oas:Security xmlns:oas="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
             <oas:UsernameToken xmlns:oas1="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" oas1:Id="UsernameToken-1">
@@ -79,33 +79,37 @@ exports.getHotelDetails = async (params) => {
   const soapParams = { ...result, ...data };
   const soapRequest = buildSoapRequest(soapParams);
   //return soapRequest;
-  // Send SOAP request
-
-
-  // Define a function to get the dynamic file path
-  function getDynamicFilePath() {
-    // Logic to determine the dynamic file path
-    return './1ASIWAMAAGN_PDT_HotelAvailability_2.0_4.0.wsdl';
+  const wsdl = "./1ASIWAMAAGN_PDT_HotelAvailability_2.0_4.0.wsdl";
+  const options = {
+    endpoint: addressingURL,
+    forceSoap12Headers:true
   }
-  const filePath = getDynamicFilePath();
-  console.log(filePath);
+
   try {
-    
-    // Read the WSDL file asynchronously
-    fs.readFile(filePath, 'utf8', (err, wsdl) => {
+    const searchCriteria = {
+      cityCode: 'PAR',
+      checkInDate: '2024-06-01',
+      checkOutDate: '2024-06-03',
+      adults: 2,
+      roomQuantity: 1,
+      radius: '10',
+      currency: 'USD'
+    };
+    soap.createClient(wsdl, options, (err, client) => {
       if (err) {
-        console.error('Failed to read WSDL file:', err);
-      } else {
-        //Create a SOAP client with the fetched WSDL content
-        soap.createClient(wsdl, (err, client) => {
-          if (err) {
-            console.error('Failed to create SOAP client:', err);
-          } else {
-            // Call SOAP methods...
-          }
-        });
-        return "SOAP client created";
+        console.error('Failed to create SOAP client:', err);
+        return;
       }
+      //console.log(client);
+      client.Hotel_MultiSingleAvailability(searchCriteria, function(err, result) {
+        if (err) {
+          console.error('Error calling Hotel MultiSingleAvailability:', err);
+          return;
+        }
+    
+        // Process the result
+        console.log('Hotel availability response:', result);
+      });
     });
   } catch (error) {
     return error;

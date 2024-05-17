@@ -8,6 +8,7 @@ class hotelController {
         try {
             data = await Hotel.getHotelDetails(req.body);
         } catch (error) {
+            const stackLines = error.stack.split('\n');
             res.send({
                 res_code: 201,
                 response: "Something unexpected happened. Try again later.",

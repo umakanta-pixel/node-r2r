@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by AMADEUS s.a.s. (AMADEUS s.a.s.) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://xml.amadeus.com/2010/06/FareInternalTypes_v2" xmlns:ama="http://xml.amadeus.com/2010/06/Types_v3" xmlns:ota="http://www.opentravel.org/OTA/2003/05/OTA2011A" xmlns:pnr="http://xml.amadeus.com/2010/06/PNR_Types_v4" xmlns:pri="http://xml.amadeus.com/2010/06/PricingTypes_v4" xmlns:qot="http://xml.amadeus.com/2010/06/QuotationTypes_v2" xmlns:qot1="http://xml.amadeus.com/2010/06/QuotationTypes_v1" targetNamespace="http://xml.amadeus.com/2010/06/FareInternalTypes_v2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.000" id="AMA2016L">
+  <xs:import namespace="http://xml.amadeus.com/2010/06/PricingTypes_v4" schemaLocation="AMA_PricingCommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/Types_v3" schemaLocation="../2016B/AMA_CommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/QuotationTypes_v2" schemaLocation="../2016H/AMA_QuotationCommonTypes_Proxy.xsd" />
+  <xs:import namespace="http://www.opentravel.org/OTA/2003/05/OTA2011A" schemaLocation="../../OTA/2011A/OTA_Proxy.xsd" />
+  <xs:import namespace="http://xml.amadeus.com/2010/06/PNR_Types_v4" schemaLocation="../2016H/AMA_PNR_CommonTypes_Proxy.xsd" />
+  <!--Replaced file inclusion C:/Users/ksgupta/Downloads/ZIP_file_data4/Retailing_RebookAndReprice_2.0/AMA/2016L/chameleon/AMA_FareInternalCommonTypes.xsd with its content-->
+  <!--xs:include schemaLocation="../../2015F/chameleon/AMA_QuotationElementCommonTypes.xsd"/-->
+  <xs:complexType name="PricingOptionType">
+    <xs:complexContent>
+      <xs:extension base="pri:PricingOptionBaseType">
+        <xs:sequence>
+          <xs:element name="AssociatedPNRElement" minOccurs="0" maxOccurs="99">
+            <xs:complexType>
+              <xs:attribute name="Type" type="ama:AlphaNumericStringLength1to4" use="optional">
+                <xs:annotation>
+                  <xs:documentation>Passenger / Segment / etc...</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="Tattoo" type="xs:NMTOKEN" use="optional">
+                <xs:annotation>
+                  <xs:documentation>Tattoo of the element</xs:documentation>
+                </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="RefIDs" type="xs:NMTOKEN" use="optional">
+                <xs:annotation>
+                  <xs:documentation source="Simple space separated list of UUIDs that this element is linked to." />
+                </xs:annotation>
+              </xs:attribute>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TotalsType">
+    <xs:sequence>
+      <xs:element name="Price" minOccurs="0" maxOccurs="99">
+        <xs:complexType>
+          <xs:attributeGroup ref="qot:PriceAttributeGroup" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Points" type="qot:PointType" minOccurs="0" maxOccurs="99" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="QuotationType">
+    <xs:complexContent>
+      <xs:extension base="qot:QuotationGenericElementType">
+        <xs:attributeGroup ref="pnr:DisplayedElement" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PricingRecordType">
+    <xs:sequence>
+      <xs:element name="PaxName" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="Title" type="xs:string" />
+          <xs:attribute name="LastName" type="xs:string" />
+          <xs:attribute name="FirstName" type="xs:string" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Price" minOccurs="0" maxOccurs="99">
+        <xs:complexType>
+          <xs:attributeGroup ref="qot:PriceAttributeGroup" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Tax" minOccurs="0" maxOccurs="999">
+        <xs:complexType>
+          <xs:attributeGroup ref="qot:TaxAttributeGroup" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Fee" minOccurs="0" maxOccurs="99">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Price" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:attributeGroup ref="qot:PriceAttributeGroup" />
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Tax" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:attributeGroup ref="qot:TaxAttributeGroup" />
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="Type" use="optional">
+            <xs:annotation>
+              <xs:documentation>Fee Type (example: OB)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="10" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="Code" use="optional">
+            <xs:annotation>
+              <xs:documentation>Fee code (axample: FC1 or T01)</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="5" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="Description" use="optional">
+            <xs:annotation>
+              <xs:documentation>Fee commercial description</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="250" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Points" minOccurs="0" maxOccurs="99">
+        <xs:complexType>
+          <xs:complexContent>
+            <xs:extension base="qot:PointType" />
+          </xs:complexContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="PricingInfo" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="AssociatedPNRElement" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:attribute name="Type" type="ama:AlphaNumericStringLength1to10" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Passenger / Segment / etc...</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Tattoo" type="xs:NMTOKEN" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Tattoo of the element</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="RefIDs" type="xs:NMTOKEN" use="optional">
+                  <xs:annotation>
+                    <xs:documentation source="Simple space separated list of UUIDs that this element is linked to." />
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="ServiceProvider" minOccurs="0" maxOccurs="10">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="qot:CarrierCodeType">
+                    <xs:attribute name="Type">
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:maxLength value="30" />
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="OtherInfo" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute name="Name" type="ama:AlphaNumericStringLength1to20" />
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="PricingRecordRefIDs" type="xs:NMTOKEN" use="optional">
+            <xs:annotation>
+              <xs:documentation>Tattoo of the created TST</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="CreationDate" type="xs:date" use="optional">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Creation Date of the TST</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="PassengerTypeCode" type="ota:AlphaNumericStringLength1to8" use="optional">
+            <xs:annotation>
+              <xs:documentation xml:lang="en">Code used to indicate the type of traveler that will be traveling (e.g., ADT, CHD, INF, GRP, NCG, COG ; the two last ones means Non Commercial Group and Corporate Group).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Endorsement" use="optional">
+            <xs:annotation>
+              <xs:documentation>Free-flow text Fare Calculation</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="250" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="FareCalc" use="optional">
+            <xs:annotation>
+              <xs:documentation>Free-flow text Fare Calculation</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="160" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="MileageCalc" use="optional">
+            <xs:annotation>
+              <xs:documentation>Mileage text Fare Calculation</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="160" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="PricingRecordIndicator" type="ama:AlphaNumericStringLength1to10" />
+          <xs:attribute name="PricingType" type="ama:AlphaNumericStringLength1to10">
+            <xs:annotation>
+              <xs:documentation>Used to distinguish TST, TSM and TQR data</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="RFIC" type="ama:AlphaNumericStringLength1to10" />
+          <xs:attribute name="RFISC" type="ama:AlphaNumericStringLength1to10" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="FareComponent" minOccurs="0" maxOccurs="99">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="AssociatedPNRElement" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:attribute name="Type" type="ama:AlphaNumericStringLength1to10" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Passenger / Segment / etc...</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Tattoo" type="xs:NMTOKEN" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Tattoo of the element</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="RefIDs" type="xs:NMTOKEN" use="optional">
+                  <xs:annotation>
+                    <xs:documentation source="Simple space separated list of UUIDs that this element is linked to." />
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="FareBasis" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="FareBasisCode" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>1..15 Fare Basis</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[a-zA-Z0-9]{1,15}" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="TicketDesignator" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>1..6 character Ticket Designator</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[a-zA-Z0-9]{1,6}" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="FareQualifier" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>One Way or Round Trip</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="ota:UpperCaseAlphaLength1to3">
+                      <xs:enumeration value="OW" />
+                      <xs:enumeration value="RT" />
+                      <xs:enumeration value="BOR" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="FareFamily" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="Name" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Code name of the Fare Family</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:maxLength value="30" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="Owner" type="qot:CarrierCodeType" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Carrier owner of the Fare Family</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Price" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:attributeGroup ref="qot:PriceAttributeGroup" />
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Points" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="qot:PointType" />
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="OtherInfo" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute name="Name" type="ama:AlphaNumericStringLength1to20" />
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="Number" type="xs:NMTOKEN" use="optional">
+            <xs:annotation>
+              <xs:documentation>One or more segments to which the pricing element applies</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Type" use="optional">
+            <xs:annotation>
+              <xs:documentation>FC for Fare Component</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:maxLength value="10" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="Origin" type="ama:AlphaNumericStringLength3to7" />
+          <xs:attribute name="Destination" type="ama:AlphaNumericStringLength3to7" />
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="Coupon" minOccurs="0" maxOccurs="99">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="FareBasis" minOccurs="0">
+              <xs:complexType>
+                <xs:attribute name="FareBasisCode" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>1..15 Fare Basis</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[a-zA-Z0-9]{1,15}" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="TicketDesignator" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>1..6 character Ticket Designator</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:pattern value="[a-zA-Z0-9]{1,6}" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="FreeBagAllowance" minOccurs="0" maxOccurs="10">
+              <xs:complexType>
+                <xs:attribute name="Measure" type="ama:AlphaNumericStringLength1to10" />
+                <xs:attribute name="DecimalPlaces" type="qot:nonNegativeIntegerOrString0">
+                  <xs:annotation>
+                    <xs:documentation>Indicates the number of decimal places for a particular currency. This is equivalent to the ISO 4217 standard "minor unit". Typically used when the amount provided includes the minor unit of currency without a decimal point (e.g., USD 8500 needs DecimalPlaces="2" to represent $85)</xs:documentation>
+                  </xs:annotation>
+                </xs:attribute>
+                <xs:attribute name="Type" type="ama:AlphaNumericStringLength1to10" />
+                <xs:attribute name="Unit" type="ama:AlphaNumericStringLength1to10" />
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="ClassOfService" minOccurs="0">
+              <xs:annotation>
+                <xs:documentation>Class of Service at Pricing/Repricing time</xs:documentation>
+              </xs:annotation>
+              <xs:simpleType>
+                <xs:restriction base="xs:string">
+                  <xs:pattern value="[0-9A-Za-z]{1,7}" />
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+            <xs:element name="DateValidity" minOccurs="0" maxOccurs="2">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:date">
+                    <xs:attribute name="Type" use="required">
+                      <xs:annotation>
+                        <xs:documentation>NVA: Not Valid After = Valid until "To"
+NVB: Not Valid Before = Valid from "From"</xs:documentation>
+                      </xs:annotation>
+                      <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                          <xs:enumeration value="NVA" />
+                          <xs:enumeration value="NVB" />
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="Tax" minOccurs="0" maxOccurs="999">
+              <xs:annotation>
+                <xs:documentation>Airport breakdown tax at coupon level.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:attributeGroup ref="qot:TaxAttributeGroup" />
+                <xs:attribute name="LocationType" use="optional">
+                  <xs:annotation>
+                    <xs:documentation>Arrival, Departure, etc...</xs:documentation>
+                  </xs:annotation>
+                  <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                      <xs:maxLength value="10" />
+                    </xs:restriction>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="Airport" type="qot:CityCodeType" />
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="OtherInfo" minOccurs="0" maxOccurs="99">
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string">
+                    <xs:attribute name="Name" type="ama:AlphaNumericStringLength1to20" />
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name="SegmentTattoo" type="xs:NMTOKEN" use="optional">
+            <xs:annotation>
+              <xs:documentation>One or more segments to which the pricing element applies</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="ConvertRate" type="qot:ConversionRateType" minOccurs="0" maxOccurs="4" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
