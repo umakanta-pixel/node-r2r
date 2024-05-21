@@ -1,4 +1,4 @@
-const validator = (body) => {
+const tripRequestvalidator = (body) => {
     try {
         if (!body.hasOwnProperty("serviceTypes")) {
             return { res_code: 400, response: "Error", msg: 'Service type array is required' }
@@ -52,4 +52,4 @@ const validator = (body) => {
     }
 }
 
-module.exports = validator
+module.exports = tripRequestvalidator

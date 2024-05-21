@@ -1,11 +1,10 @@
 const { directionApiCall, logErrorToFile } = require('../helpers/helper');
-// const { validationResult } = require("express-validator");
-const Algolia = require("algoliasearch")
+// const Algolia = require("algoliasearch")
 
 const transferLib = require('../lib/transfer.lib');
-const ferryLib = require('../lib/ferry.lib');
 const flightController = require('./flight.controller');
-const validate = require('../helpers/validation');
+const tripRequestvalidator = require('../validations/tripRequest.validate');
+const { searchFerry } = require('../helpers/algolia.helper');
 
 class tripController {
     constructor() { }
@@ -50,16 +49,7 @@ class tripController {
     static async ferryRoutes(params) {
         const dt = params.departure_datetime.split('T')[1]
         const start_time = dt.split(':')[0] + ':' + dt.split(':')[1]
-        const algoliaClient = new Algolia('C2CIGV0HZ4', '92c465f379330bfc3c60c340bb1aceac');
-        const ferriesIndex = algoliaClient.initIndex("ferries_master");
-
-        const data = await ferriesIndex.search(params.start_city_code, {
-            facetFilters: ['arrival_city_code:' + params.end_city_code]
-        })
-        const routes = data.hits.filter(obj => obj.departure_time >= start_time);
-
-        // return data.hits
-        // return routes;
+        const routes=searchFerry(params, start_time);
         const final = await Promise.all(routes.map(async (route) => {
             route.type = 'ferry';
             let tmp = {
@@ -91,12 +81,56 @@ class tripController {
         }));
         return final;
     }
+    // static async ferryRoutes(params) {
+    //     const dt = params.departure_datetime.split('T')[1]
+    //     const start_time = dt.split(':')[0] + ':' + dt.split(':')[1]
+    //     const algoliaClient = new Algolia('C2CIGV0HZ4', '92c465f379330bfc3c60c340bb1aceac');
+    //     const ferriesIndex = algoliaClient.initIndex("ferries_master");
+
+    //     const data = await ferriesIndex.search(params.start_city_code, {
+    //         facetFilters: ['arrival_city_code:' + params.end_city_code]
+    //     })
+    //     const routes = data.hits.filter(obj => obj.departure_time >= start_time);
+
+    //     // return data.hits
+    //     // return routes;
+    //     const final = await Promise.all(routes.map(async (route) => {
+    //         route.type = 'ferry';
+    //         let tmp = {
+    //             total_duration: route['duration_in_seconds'],
+    //             first_stop: route['departure_port'] + ' port',
+    //             last_stop: route['arrival_port'] + ' port',
+    //             overview_polyline: '',
+    //             modes: [route]
+    //         };
+    //         let driveOne = await tripController.drivingRoutes({
+    //             'start_point': params.start_point_latitude + ',' + params.start_point_longitude,
+    //             'end_point': route.departure_port_latitude + ',' + route.departure_port_longitude,
+    //             'arrival': params.departure_datetime.split('T')[0] + 'T' + route.departure_time + ':00'
+    //         });
+    //         if (driveOne.length) {
+    //             tmp.modes.unshift(driveOne);
+    //             tmp.total_duration += driveOne['duration']['value']
+    //         }
+    //         let driveTwo = await tripController.drivingRoutes({
+    //             'start_point': route.arrival_port_latitude + ',' + route.arrival_port_longitude,
+    //             'end_point': params.end_point_latitude + ',' + params.end_point_longitude,
+    //             'departure': params.departure_datetime.split('T')[0] + 'T' + route.arrival_time + ':00'
+    //         });
+    //         if (driveTwo.length) {
+    //             tmp.modes.push(driveTwo);
+    //             tmp.total_duration += driveTwo['duration']['value']
+    //         }
+    //         return tmp;
+    //     }));
+    //     return final;
+    // }
 
 
     async combineRouteList(req, res) {
 
         try {
-            const validationError = validate(req.body);
+            const validationError = tripRequestvalidator(req.body);
             if (validationError) {
                 return res.json(validationError);
             }
