@@ -78,7 +78,7 @@ exports.getHotelDetails = async (params) => {
   let data = Helper.getAmadeusheader();
   const soapParams = { ...result, ...data };
   const soapRequest = buildSoapRequest(soapParams);
-  //return soapRequest;
+  return soapParams;
   const wsdl = "./1ASIWAMAAGN_PDT_HotelAvailability_2.0_4.0.wsdl";
   const options = {
     endpoint: addressingURL,
@@ -86,22 +86,15 @@ exports.getHotelDetails = async (params) => {
   }
 
   try {
-    const searchCriteria = {
-      cityCode: 'PAR',
-      checkInDate: '2024-06-01',
-      checkOutDate: '2024-06-03',
-      adults: 2,
-      roomQuantity: 1,
-      radius: '10',
-      currency: 'USD'
-    };
+
     soap.createClient(wsdl, options, (err, client) => {
       if (err) {
         console.error('Failed to create SOAP client:', err);
         return;
       }
-      //console.log(client);
-      client.Hotel_MultiSingleAvailability(searchCriteria, function(err, result) {
+      //return "";
+      console.log("SOAP client created");
+      client.Hotel_MultiSingleAvailabilityAsync(soapRequest, function(err, result) {
         if (err) {
           console.error('Error calling Hotel MultiSingleAvailability:', err);
           return;

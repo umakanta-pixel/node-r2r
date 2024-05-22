@@ -12,6 +12,7 @@ const contentController = require('../controllers/content.controller');
 router.post('/trip-planner/routes', encryption, decryption, tripController.combineRouteList);
 router.post('/trip-planner/ferry', ferryController.fetchFromAlgolia);
 router.post('/hotel/get-details',hotelController.getHotelDetails);
+router.post('/hotel/get-room',hotelController.getRoomDetails);
 
 router.post('/search-contents',contentController.searchContent);
 

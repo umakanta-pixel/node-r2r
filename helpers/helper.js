@@ -73,7 +73,7 @@ function sprintf(format, ...args) {
 exports.getAmadeusheader = () => {
 
     const password = "ZiVk5J@KxUgX";
-    const wsap = "1ASIWAMAAGN";
+    const wsap = "1ASIWAMAAGNU";
     const userId = "WSAGNAMA";
     const offerId = "LONU125AO";
     const dutyCode = "SU";

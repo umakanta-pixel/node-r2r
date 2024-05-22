@@ -7,6 +7,7 @@ class hotelController {
         let data;
         try {
             data = await Hotel.getHotelDetails(req.body);
+            
         } catch (error) {
             const stackLines = error.stack.split('\n');
             res.send({
@@ -18,6 +19,13 @@ class hotelController {
         }
         res.send(data);
     }
+    async getRoomDetails(req,res) {
+        let result = [];
+        let room = await Hotel.roomOffer(result);
+        res.send(room);
+    }
 }
+
+
 
 module.exports = new hotelController();
