@@ -49,7 +49,7 @@ class tripController {
     static async ferryRoutes(params) {
         const dt = params.departure_datetime.split('T')[1]
         const start_time = dt.split(':')[0] + ':' + dt.split(':')[1]
-        const routes=searchFerry(params, start_time);
+        const routes=await searchFerry(params, start_time);
         const final = await Promise.all(routes.map(async (route) => {
             route.type = 'ferry';
             let tmp = {
